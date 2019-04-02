@@ -54,8 +54,14 @@ function getParks(query,limit){
   fetch(apiUrl)
     .then(response => response.json())
     .then(jsonData => {
+      if (Number(jsonData.total) === 0) {
+        return $('#js-error-message').text(`Your search for ${query} returned no results`);  
+      }
       store = jsonData.data.map(data => new Park(data));
       render();
+    })
+    .catch(err => {
+      $('#js-error-message').text(`Something went wrong: ${err.message}`);
     });
 }
 
